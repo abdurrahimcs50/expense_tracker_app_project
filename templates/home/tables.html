@@ -1,0 +1,72 @@
+{% extends 'home/dashboard_base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+<div class="container-fluid px-0">
+    <h1 class="mt-4">History</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+        <li class="breadcrumb-item active">History</li>
+    </ol>
+
+    <form action="{% url 'search' %}" method="get" class="mb-3 d-flex align-items-center gap-2 flex-wrap">
+        <label for="fromdate" class="mb-0">From:</label>
+        <input type="date" id="fromdate" name="fromdate" required class="form-control form-control-sm" style="max-width: 180px;" />
+        <label for="todate" class="mb-0">To:</label>
+        <input type="date" id="todate" name="todate" required class="form-control form-control-sm" style="max-width: 180px;" />
+        <button type="submit" class="btn btn-primary btn-sm">Search</button>
+        <a href="{% url 'tables' %}" class="btn btn-success btn-sm">Search All</a>
+    </form>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-2"></i>
+            Data Table
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>What you added</th>
+                            <th>Amount</th>
+                            <th>Category</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for money in addmoney %}
+                        <tr>
+                            <td>{{ money.add_money }}</td>
+                            <td>{{ money.quantity }}</td>
+                            <td>{{ money.Category }}</td>
+                            <td>{{ money.Date|date:"M d, Y" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center">No records found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        $('#dataTable').DataTable({
+            paging: true,
+            info: true,
+            searching: true,
+            ordering: true,
+            lengthChange: true,
+            pageLength: 10,
+        });
+    });
+</script>
+{% endblock scripts %}

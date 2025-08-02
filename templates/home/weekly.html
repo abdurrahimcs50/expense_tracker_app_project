@@ -1,0 +1,43 @@
+{% extends 'home/dashboard_base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+<div class="container-fluid px-0">
+    <h1 class="mt-4">Weekly Expense</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+        <li class="breadcrumb-item active">Charts</li>
+    </ol>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-chart-pie me-2"></i> Weekly Expense Chart
+                </div>
+                <div class="card-body">
+                    <canvas id="myChart" width="400" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    Weekly Summary
+                </div>
+                <div class="card-body">
+                    <p>Amount spent this week: {{ addmoney_info.sum|intcomma }}</p>
+                    <p>Amount saved this week: {{ addmoney_info.x|intcomma }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'javascript/weekly.js' %}"></script>
+<!-- Make sure you only load jQuery once in your base, no duplicates -->
+{% endblock scripts %}

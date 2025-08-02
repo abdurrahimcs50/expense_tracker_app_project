@@ -1,0 +1,60 @@
+{% extends 'home/dashboard_base.html' %}
+{% load static %}
+
+{% block title %}Edit Wallet Entry{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow border-0 rounded-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>Edit Wallet Entry</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'addmoney_update' addmoney_info.id %}">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label class="form-label d-block">Transaction Type</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="add_money" id="expense" value="Expense"
+                                    {% if addmoney_info.add_money == "Expense" %}checked{% endif %} required>
+                                <label class="form-check-label" for="expense">Expense</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="add_money" id="income" value="Income"
+                                    {% if addmoney_info.add_money == "Income" %}checked{% endif %} required>
+                                <label class="form-check-label" for="income">Income</label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label">Amount</label>
+                            <input type="number" name="quantity" id="quantity" class="form-control" value="{{ addmoney_info.quantity }}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Date" class="form-label">Date</label>
+                            <input type="date" name="Date" id="Date" class="form-control" value="{{ addmoney_info.Date|date:'Y-m-d' }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Category" class="form-label">Category</label>
+                            <select name="Category" id="Category" class="form-select" required>
+                                {% for option in "Food,Travel,Shopping,Necessities,Entertainment,Others".split(',') %}
+                                    <option value="{{ option }}" {% if addmoney_info.Category == option %}selected{% endif %}>
+                                        {{ option }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

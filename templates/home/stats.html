@@ -1,0 +1,79 @@
+{% extends "home/dashboard_base.html" %}
+{% load static %}
+
+{% block title %}Monthly Expense{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="mt-4">Monthly Expense</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+        <li class="breadcrumb-item active">Charts</li>
+    </ol>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-chart-pie mr-1"></i>
+                    Monthly Expense
+                </div>
+                <div class="card-body">
+                    <canvas id="myChart" width="100%" height="60"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-chart-bar mr-1"></i>
+                    Monthly Record
+                </div>
+                <div class="card-body">
+                    <p><strong>Amount to be saved:</strong> {{ user.userprofile.Savings }}</p>
+                    <p><strong>Amount spent:</strong> {{ addmoney.sum }}</p>
+                    <p><strong>Amount saved:</strong> {{ addmoney.x }}</p>
+                    <p><strong>Overspent by:</strong> {{ addmoney.y }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const ctx = document.getElementById('myChart').getContext('2d');
+  
+  const data = {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    datasets: [{
+      label: 'Monthly Expense',
+      data: {{ monthly_data|safe }},
+      backgroundColor: 'rgba(54, 162, 235, 0.6)',
+      borderColor: 'rgba(54, 162, 235, 1)',
+      borderWidth: 1
+    }]
+  };
+
+  const options = {
+    responsive: true,
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  };
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: data,
+    options: options
+  });
+});
+</script>
+{% endblock %}
